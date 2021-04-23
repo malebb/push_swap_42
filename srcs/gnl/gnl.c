@@ -1,6 +1,6 @@
 #include "checker.h"
 
-void		strncpy_from(char *dest, char *src, int n, int from)
+static void		strncpy_from(char *dest, char *src, int n, int from)
 {
 	int		i;
 
@@ -13,7 +13,7 @@ void		strncpy_from(char *dest, char *src, int n, int from)
 	dest[from + i] = '\0';
 }
 
-int		add_to_line(char **line, char buf[1001])
+static int		add_to_line(char **line, char buf[1001])
 {
 	int		size_line;
 	char	*tmp;
@@ -39,7 +39,7 @@ int		add_to_line(char **line, char buf[1001])
 	return (line_read);
 }
 
-int		finish_buf(char **line, char *buf)
+static int		finish_buf(char **line, char *buf)
 {
 	int		line_read;
 
