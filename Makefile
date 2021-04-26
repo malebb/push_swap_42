@@ -6,7 +6,7 @@
 #    By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/17 19:40:00 by mlebrun           #+#    #+#              #
-#    Updated: 2021/04/26 13:58:45 by mlebrun          ###   ########.fr        #
+#    Updated: 2021/04/26 15:03:15 by mlebrun          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS_CHECKER = srcs/main_checker.c \
 	   srcs/ft/ft_strdup.c \
 	   srcs/ft/ft_isdigit.c \
 	   srcs/ft/ft_putstr.c \
+	   srcs/ft/ft_strcmp.c \
 	   srcs/gnl/gnl.c
 
 SRCS_PUSH_SWAP = srcs/main_push_swap.c

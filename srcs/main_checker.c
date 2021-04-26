@@ -23,12 +23,6 @@ long long int	ft_atoi(char *nbr)
 	return (nb * neg);
 }
 
-int		check_duplicates(char *argv[])
-{
-	(void)argv;
-	return (1);
-}
-
 int		only_numbers(char *argv[])
 {
 	int		i;
@@ -48,12 +42,6 @@ int		only_numbers(char *argv[])
 		}
 		i++;
 	}
-	return (TRUE);
-}
-
-int		check_overflow(char *argv[])
-{
-	(void)argv;
 	return (TRUE);
 }
 
@@ -110,6 +98,27 @@ t_nbr		*stock_numbers(char *argv[])
 	return (nbrs);
 }
 
+int			check_duplicates(t_nbr *nbr)
+{
+	t_nbr		*first_nbr;
+	t_nbr		*nbr_passed;
+
+	first_nbr = nbr;
+	nbr_passed = nbr;
+	while (nbr)
+	{
+		while (nbr_passed != nbr)
+		{
+			if (nbr_passed->value == nbr->value)
+				return (0);
+			nbr_passed = nbr_passed->next;
+		}
+		nbr_passed = first_nbr;
+		nbr = nbr->next;
+	}
+	return (1);
+}
+
 t_nbr		*check_args(char *argv[])
 {
 	t_nbr		*nbrs;
@@ -118,17 +127,28 @@ t_nbr		*check_args(char *argv[])
 		return (NULL);
 	if (!(nbrs = stock_numbers(argv)))
 		return (NULL);
-	if (!check_overflow(argv))
-		return (NULL);
-	if (!check_duplicates(argv))
+	if (!check_duplicates(nbrs))
 		return (NULL);
 	return (nbrs);
+}
+
+int			real_instruction(char *instruction)
+{
+	if (!ft_strcmp(instruction, "sa") || !ft_strcmp(instruction, "sb")
+	 || !ft_strcmp(instruction, "ss") || !ft_strcmp(instruction, "pa")
+	 || !ft_strcmp(instruction, "pb") || !ft_strcmp(instruction, "ra")
+	 || !ft_strcmp(instruction, "rb") || !ft_strcmp(instruction, "rr")
+	 || !ft_strcmp(instruction, "rra") || !ft_strcmp(instruction, "rrb")
+	 || !ft_strcmp(instruction, "rrr"))
+		return (1);
+	return (0);
 }
 
 int		main(int argc, char *argv[])
 {
 	(void)argc;
 	t_nbr		*nbrs;
+	char		*instruction;
 
 	if (argc < 2)
 		return (1);
@@ -136,6 +156,14 @@ int		main(int argc, char *argv[])
 	{
 		ft_putstr("Error\n");
 		return (1);
+	}
+	while (gnl(&instruction))
+	{
+		if (!real_instruction(instruction))
+		{
+			ft_putstr("Error\n");
+			return (0);
+		}
 	}
 	while (nbrs)
 	{
