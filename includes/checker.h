@@ -10,9 +10,10 @@
 
 typedef struct		s_nbr
 {
-	int				nbr;
+	int				value;
 	struct s_nbr	*next;
 }					t_nbr;
 
 int		gnl(char **line);
+
 #endif
