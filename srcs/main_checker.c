@@ -74,7 +74,6 @@ int			add_nbr(t_nbr **nbrs, long long int nb)
 			return (0);
 		*nbrs = first_nb;
 	}
-
 	return (1);
 }
 
@@ -119,19 +118,32 @@ int			check_duplicates(t_nbr *nbr)
 	return (1);
 }
 
+int			count_nbr(t_nbr *nbrs)
+{
+	int		count;
+
+	count = 0;
+	while (nbrs)
+	{
+		count++;
+		nbrs = nbrs->next;
+	}
+	return (count);
+}
+
 t_nbr		*check_args(char *argv[])
 {
-	t_nbr		*nbrs;
+	t_nbr		*stack_a;
 
 	if (!only_numbers(argv))
 		return (NULL);
-	if (!(nbrs = stock_numbers(argv)))
+	if (!(stack_a = stock_numbers(argv)))
 		return (NULL);
-	if (!check_duplicates(nbrs))
+	if (!check_duplicates(stack_a))
 		return (NULL);
-	return (nbrs);
+	return (stack_a);
 }
-
+/*
 int			real_instruction(char *instruction)
 {
 	if (!ft_strcmp(instruction, "sa") || !ft_strcmp(instruction, "sb")
@@ -143,32 +155,163 @@ int			real_instruction(char *instruction)
 		return (1);
 	return (0);
 }
+*/
+
+void	swap(t_nbr **stack)
+{
+	t_nbr		*first_elem;
+	t_nbr		*third_elem;
+
+	if (count_nbr(*stack) < 2)
+		return ;
+	first_elem = *stack;
+	*stack = (*stack)->next;
+	third_elem = (*stack)->next;
+	(*stack)->next = first_elem;
+	(*stack)->next->next = third_elem;
+}
+
+void	push(t_nbr **stack_dst, t_nbr **stack_src)
+{
+	t_nbr		*second_nbr;
+
+	if (!(*stack_src))
+		return ;
+	second_nbr = (*stack_src)->next;
+	(*stack_src)->next = *stack_dst;
+	*stack_dst = *stack_src;
+	*stack_src = second_nbr;
+}
+
+void	rotate(t_nbr **stack)
+{
+	t_nbr	*first_nbr;
+	t_nbr	*second_nbr;
+
+	if (!(*stack) || !(*stack)->next)
+		return ;
+	first_nbr = *stack;
+	second_nbr = (*stack)->next;
+	while ((*stack)->next != NULL)
+		*stack = (*stack)->next;
+	(*stack)->next = first_nbr;
+	(*stack)->next->next = NULL;
+	*stack = second_nbr;
+}
+
+void	reverse_rotate(t_nbr **stack)
+{
+	t_nbr	*first_nbr;
+	t_nbr	*last_nbr;
+
+	if (!(*stack) || !(*stack)->next)
+		return ;
+	first_nbr = *stack;
+	while ((*stack)->next->next)
+		*stack = (*stack)->next;
+	(*stack)->next->next = first_nbr;
+	last_nbr = (*stack)->next;
+	(*stack)->next = NULL;
+	(*stack) = last_nbr;
+}
+
+int		apply_instruction(t_nbr **stack_a, t_nbr **stack_b, char *instruction)
+{
+	if (!ft_strcmp(instruction, "sa"))
+		swap(stack_a);
+	else if (!ft_strcmp(instruction, "sb"))
+		swap(stack_b);
+	else if (!ft_strcmp(instruction, "ss"))
+	{
+		swap(stack_a);
+		swap(stack_b);
+	}
+	else if (!ft_strcmp(instruction, "pa"))
+		push(stack_a, stack_b);
+	else if (!ft_strcmp(instruction, "pb"))
+		push(stack_b, stack_a);
+	else if (!ft_strcmp(instruction, "ra"))
+		rotate(stack_a);
+	else if (!ft_strcmp(instruction, "rb"))
+		rotate(stack_b);
+	else if (!ft_strcmp(instruction, "rr"))
+	{
+		rotate(stack_a);
+		rotate(stack_b);
+	}
+	else if (!ft_strcmp(instruction, "rra"))
+		reverse_rotate(stack_a);
+	else if (!ft_strcmp(instruction, "rrb"))
+		reverse_rotate(stack_b);
+	else if (!ft_strcmp(instruction, "rrr"))
+	{
+		reverse_rotate(stack_a);
+		reverse_rotate(stack_b);
+	}	
+	else
+		return (0);
+	return (1);
+}
+
+int		is_sorted(t_nbr *stack)
+{
+	int		previous_value;
+	int		first_nb;
+
+	first_nb = 1;
+	while (stack)
+	{
+		if (!first_nb && (stack->value < previous_value))
+			return (0);
+		first_nb = 0;
+		previous_value = stack->value;
+		stack = stack->next;
+	}
+	return (1);
+}
+
+void	print_stacks(t_nbr *stack_a, t_nbr *stack_b)
+{
+	printf("Stack A\n");
+	while (stack_a)
+	{
+		printf("nb = %d\n", stack_a->value);
+		stack_a = stack_a->next;
+	}
+	printf("Stack B\n");
+	while (stack_b)
+	{
+		printf("nb = %d\n", stack_b->value);
+		stack_b = stack_b->next;
+	}
+}
 
 int		main(int argc, char *argv[])
 {
-	(void)argc;
-	t_nbr		*nbrs;
+	t_nbr		*stack_a;
+	t_nbr		*stack_b;
 	char		*instruction;
 
 	if (argc < 2)
 		return (1);
-	if (!(nbrs = check_args(argv)))
+	if (!(stack_a = check_args(argv)))
 	{
 		ft_putstr("Error\n");
 		return (1);
 	}
+	stack_b = NULL;
 	while (gnl(&instruction))
 	{
-		if (!real_instruction(instruction))
+		if (!apply_instruction(&stack_a, &stack_b, instruction))
 		{
 			ft_putstr("Error\n");
-			return (0);
+			return (1);
 		}
 	}
-	while (nbrs)
-	{
-		printf("nb = %d\n", nbrs->value);
-		nbrs = nbrs->next;
-	}
+	print_stacks(stack_a, stack_b);
+	if (!stack_b && is_sorted(stack_a))
+		ft_putstr("OK\n");
+	else
+		ft_putstr("KO\n");
 	return (0);
 }
