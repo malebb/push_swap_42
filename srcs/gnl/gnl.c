@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gnl.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/29 10:40:59 by mlebrun           #+#    #+#             */
+/*   Updated: 2021/04/29 10:42:30 by mlebrun          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "checker.h"
 
 static void		strncpy_from(char *dest, char *src, int n, int from)
@@ -23,12 +35,12 @@ static int		add_to_line(char **line, char buf[1001])
 	size_line = ft_strlen(*line);
 	byte_to_add = 0;
 	while (buf[byte_to_add] != '\0' && buf[byte_to_add] != '\n')
-			byte_to_add++;
+		byte_to_add++;
 	line_read = 0;
 	if (buf[byte_to_add] == '\n')
 		line_read = 1;
 	if (!(tmp = ft_strdup(*line)))
-			return (-1);
+		return (-1);
 	free(*line);
 	if (!(*line = malloc(sizeof(char) * (size_line + byte_to_add + 1))))
 		return (-1);
@@ -47,11 +59,11 @@ static int		finish_buf(char **line, char *buf)
 	{
 		line_read = add_to_line(line, buf);
 		return (line_read);
- 	}
+	}
 	return (0);
 }
 
-int		gnl(char **line)
+int				gnl(char **line)
 {
 	static char		buf[1001] = {0};
 	int				byte_read;
