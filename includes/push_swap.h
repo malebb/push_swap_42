@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_push_swap.c                                   :+:      :+:    :+:   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mlebrun <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/29 10:37:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/29 14:43:25 by mlebrun          ###   ########.fr       */
+/*   Created: 2021/04/29 11:17:58 by mlebrun           #+#    #+#             */
+/*   Updated: 2021/04/29 11:30:47 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
+# include <stdio.h>
 
-int		main(void)
+typedef enum	e_instruction
 {
+	SA,
+	SB,
+	SS,
+	PA,
+	PB,
+	RA,
+	RB,
+	RR,
+	RRA,
+	RRB,
+	RRR
+}				t_intruction;
 
-	return (0);
-}
+#endif
