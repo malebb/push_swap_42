@@ -6,34 +6,11 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/29 14:44:33 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/04/30 11:30:27 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
-
-long long int	ft_atoi(char *nbr)
-{
-	long long int	nb;
-	int				neg;
-	int				i;
-
-	i = 0;
-	neg = 1;
-	if (nbr[i] == '-')
-	{
-		i++;
-		neg = -1;
-	}
-	nb = 0;
-	while (nbr[i] != '\0')
-	{
-		nb *= 10;
-		nb += nbr[i] - 48;
-		i++;
-	}
-	return (nb * neg);
-}
 
 static int		apply_rotation(t_nbr **stack_a, t_nbr **stack_b, char *instruction)
 {

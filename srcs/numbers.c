@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:39:21 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/29 10:43:35 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/04/30 11:30:16 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,3 +76,27 @@ int				count_nbr(t_nbr *nbrs)
 	}
 	return (count);
 }
+
+long long int	ft_atoi(char *nbr)
+{
+	long long int	nb;
+	int				neg;
+	int				i;
+
+	i = 0;
+	neg = 1;
+	if (nbr[i] == '-')
+	{
+		i++;
+		neg = -1;
+	}
+	nb = 0;
+	while (nbr[i] != '\0')
+	{
+		nb *= 10;
+		nb += nbr[i] - 48;
+		i++;
+	}
+	return (nb * neg);
+}
+
