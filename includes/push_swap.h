@@ -6,7 +6,7 @@
 /*   By: mlebrun <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:17:58 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/30 11:10:29 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/04 10:28:07 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,19 @@ typedef enum	e_instruction
 	RRA,
 	RRB,
 	RRR
-}				t_intruction;
+}				t_instruction;
 
 typedef struct		s_nbr
 {
 	int				value;
 	struct s_nbr	*next;
 }					t_nbr;
+
+typedef struct		s_algo
+{
+	t_instruction		instru;
+	struct s_algo		*next;
+}					t_algo;
 
 t_nbr				*check_args(char *argv[]);
 #endif
