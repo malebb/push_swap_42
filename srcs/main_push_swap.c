@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/07 11:18:19 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/09 11:25:55 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 		}
 	}
 }
-/*
+
 static t_algo	*new_algo_link(t_instruction instru)
 {
 	t_algo		*algo_link;
@@ -46,6 +46,7 @@ static t_algo	*new_algo_link(t_instruction instru)
 	algo_link->next = NULL;
 	return (algo_link);
 }
+
 
 static int		add_algo_link(t_algo **begin_algo, t_instruction instru)
 {
@@ -67,47 +68,89 @@ static int		add_algo_link(t_algo **begin_algo, t_instruction instru)
 	}
 	return (1);
 }
-*/
+
 int		*biggest_numbers(t_nbr *stack_a)
 {
 	int		*biggest_nbrs;
 	t_nbr	*first_nb;
+	int		count;
 
 	first_nb = stack_a;
 	if (!(biggest_nbrs = malloc(sizeof(int) * 3)))
 		return (0);
+	count = 0;
 	while (stack_a)
 	{
+		if (!count)
+			biggest_nbrs[0] = stack_a->value;
 		if (biggest_nbrs[0] < stack_a->value)
 			biggest_nbrs[0] = stack_a->value;
-		stack_a = stack_a->next;	
+		stack_a = stack_a->next;
+		count = 1;
 	}
 	stack_a = first_nb;
+	count = 0;
 	while (stack_a)
 	{
+		if (!count)
+			biggest_nbrs[1] = stack_a->value;
 		if (biggest_nbrs[1] < stack_a->value && stack_a->value
 			!= biggest_nbrs[0])
 			biggest_nbrs[1] = stack_a->value;
 		stack_a = stack_a->next;	
+		count = 1;
 	}
 	stack_a = first_nb;
+	count = 0;
 	while (stack_a)
 	{
+		if (!count)
+			biggest_nbrs[2] = stack_a->value;
 		if (biggest_nbrs[2] < stack_a->value && stack_a->value
 			!= biggest_nbrs[0] && stack_a->value != biggest_nbrs[1])
 			biggest_nbrs[2] = stack_a->value;
 		stack_a = stack_a->next;	
+		count = 1;
 	}
 	return (biggest_nbrs);
 }
 
-t_algo	*create_algo(t_nbr **stack_a, t_algo **algo)
+int		size_stack(t_nbr *stack)
+{
+	int		size;
+
+	size = 0;
+	while (stack)
+	{
+		size++;
+		stack = stack->next;
+	}
+	return (size);
+}
+
+t_algo	*create_algo(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo)
 {
 	int		*biggest_nbrs;
+	int		size_stack_a;
+	int		i;
 
-	(void)stack_a;
 	biggest_nbrs = biggest_numbers(*stack_a);
-	printf("%d | %d | %d\n", biggest_nbrs[0], biggest_nbrs[1], biggest_nbrs[2]);
+	size_stack_a = size_stack(*stack_a);
+	i = 0;
+	while (i < size_stack_a)
+	{
+		if ((*stack_a)->value != biggest_nbrs[0] && (*stack_a)->value != biggest_nbrs[1] && (*stack_a)->value != biggest_nbrs[2])
+		{
+			push(stack_b, stack_a);
+			add_algo_link(algo, PB);
+		}
+		else
+		{
+			rotate(stack_a);
+			add_algo_link(algo, RA);
+		}
+		i++;
+	}
 	return (*algo);
 }
 
@@ -136,7 +179,8 @@ int		main(int argc, char **argv)
 	}
 	stack_b = NULL;
 	algo = NULL;
-	create_algo(&stack_a, &algo);
+	print_stacks(stack_a, stack_b);
+	create_algo(&stack_a, &stack_b, &algo);
 	print_algo(algo);
 	print_stacks(stack_a, stack_b);
 	return (0);

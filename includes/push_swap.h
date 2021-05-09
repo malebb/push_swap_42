@@ -6,7 +6,7 @@
 /*   By: mlebrun <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:17:58 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/04 10:28:07 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/09 10:49:09 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,8 @@ typedef struct		s_algo
 }					t_algo;
 
 t_nbr				*check_args(char *argv[]);
+void				swap(t_nbr **stack);
+void				push(t_nbr **stack_dst, t_nbr **stack_src);
+void				rotate(t_nbr **stack);
+void				reverse_rotate(t_nbr **stack);
 #endif
