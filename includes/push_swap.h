@@ -6,7 +6,7 @@
 /*   By: mlebrun <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:17:58 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/10 15:39:31 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/18 11:40:55 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,5 @@ void				swap(t_nbr **stack);
 void				push(t_nbr **stack_dst, t_nbr **stack_src);
 void				rotate(t_nbr **stack);
 void				reverse_rotate(t_nbr **stack);
+t_nbr				*new_nbr(long long int nb);
 #endif

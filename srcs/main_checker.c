@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/30 11:30:27 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/27 11:42:53 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 	}
 }
 
+int		nb_instruction;
+
 int				main(int argc, char *argv[])
 {
 	t_nbr		*stack_a;
@@ -113,17 +115,21 @@ int				main(int argc, char *argv[])
 		return (1);
 	}
 	stack_b = NULL;
-	print_stacks(stack_a, stack_b);
+	//print_stacks(stack_a, stack_b);
+	nb_instruction = 0;
 	while (gnl(&instruction))
 	{
+		printf("instru : %s\n", instruction);
 		if (!apply_instruction(&stack_a, &stack_b, instruction))
 		{
 			ft_putstr("Error\n");
 			return (1);
 		}
-		print_stacks(stack_a, stack_b);
+		//print_stacks(stack_a, stack_b);
+		nb_instruction++;
 	}
 	print_stacks(stack_a, stack_b);
+	printf("nb_instruction = %d\n", nb_instruction);
 	if (!stack_b && is_sorted(stack_a))
 		ft_putstr("OK\n");
 	else

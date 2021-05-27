@@ -6,13 +6,13 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:39:21 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/30 11:30:16 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/18 11:40:18 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-static t_nbr	*new_nbr(long long int nb)
+t_nbr	*new_nbr(long long int nb)
 {
 	t_nbr		*nbr;
 
@@ -99,4 +99,3 @@ long long int	ft_atoi(char *nbr)
 	}
 	return (nb * neg);
 }
-
