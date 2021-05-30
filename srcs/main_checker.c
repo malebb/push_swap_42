@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/27 11:42:53 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/28 11:04:50 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,17 +115,14 @@ int				main(int argc, char *argv[])
 		return (1);
 	}
 	stack_b = NULL;
-	//print_stacks(stack_a, stack_b);
 	nb_instruction = 0;
 	while (gnl(&instruction))
 	{
-		printf("instru : %s\n", instruction);
 		if (!apply_instruction(&stack_a, &stack_b, instruction))
 		{
 			ft_putstr("Error\n");
 			return (1);
 		}
-		//print_stacks(stack_a, stack_b);
 		nb_instruction++;
 	}
 	print_stacks(stack_a, stack_b);

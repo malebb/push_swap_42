@@ -6,14 +6,11 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/27 11:34:43 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/30 14:27:12 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-int		less = 0;
-int		great = 0;
 
 void	print_algo(t_algo *algo)
 {
@@ -47,9 +44,9 @@ void	print_algo(t_algo *algo)
 		algo = algo->next;
 		count_instruction++;
 	}
-	//printf("instruction nb = %d\n", count_instruction);
 }
-/*static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
+/*
+static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 {
 	printf("A   |   B\n\n");
 	while (stack_a || stack_b)
@@ -263,6 +260,51 @@ t_algo	*sort_three_nb(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo)
 	return (*algo);
 }
 
+t_algo	**sort_when_first_greater(t_nbr **stack_a, t_nbr *second, t_nbr *third, t_algo **algo)
+{
+	if (second->value < third->value)
+	{
+		add_algo_link(algo, RA);
+		rotate(stack_a);
+	}
+	else if (second->value > third->value)
+	{
+		add_algo_link(algo, SA);
+		swap(stack_a);
+		add_algo_link(algo, RRA);
+		reverse_rotate(stack_a);
+	}
+	return (algo);
+}
+
+t_algo	**sort_when_first_less(t_nbr **stack_a, t_nbr *second, t_nbr *third, t_algo **algo)
+{
+	if (second->value > third->value)
+	{
+		add_algo_link(algo, SA);
+		swap(stack_a);
+		add_algo_link(algo, RA);
+		rotate(stack_a);
+	}
+	return (algo);
+}
+
+
+t_algo	**sort_when_first_between(t_nbr **stack_a, t_nbr *second, t_nbr *third, t_algo **algo)
+{
+	if (second->value < third->value)
+	{
+		add_algo_link(algo, SA);
+		swap(stack_a);
+	}
+	else
+	{
+		add_algo_link(algo, RRA);
+		reverse_rotate(stack_a);
+	}
+	return (algo);
+}
+
 t_algo	*sort_only_three_nb(t_nbr **stack_a, t_algo **algo)
 {
 	t_nbr		*first;
@@ -274,44 +316,16 @@ t_algo	*sort_only_three_nb(t_nbr **stack_a, t_algo **algo)
 	third = (*stack_a)->next->next;
 	if (first->value < second->value && first->value < third->value)
 	{
-		if (second->value > third->value)
-		{
-			add_algo_link(algo, SA);
-			swap(stack_a);
-			add_algo_link(algo, RA);
-			rotate(stack_a);
-		}
+		sort_when_first_less(stack_a, second, third, algo);
 	}
 	else if (first->value > second->value && first->value > third->value)
 	{
-		if (second->value < third->value)
-		{
-			add_algo_link(algo, RA);
-			rotate(stack_a);
-		}
-		else if (second->value > third->value)
-		{
-			add_algo_link(algo, SA);
-			swap(stack_a);
-			add_algo_link(algo, RRA);
-			reverse_rotate(stack_a);
-		}
+		sort_when_first_greater(stack_a, second, third, algo);
 	}
 	else
 	{
-		if (second->value < third->value)
-		{
-			add_algo_link(algo, SA);
-			swap(stack_a);
-		}
-		else
-		{
-			add_algo_link(algo, RRA);
-			reverse_rotate(stack_a);
-		}
+		sort_when_first_between(stack_a, second, third, algo);
 	}
-		//print_algo(*algo);
-//		print_stacks(*stack_a, NULL);
 	return (*algo);
 }
 
@@ -369,13 +383,11 @@ int		greater_than_pivot(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo, int piv
 			push(stack_a, stack_b);
 			add_algo_link(algo, PA);
 			greater++;
-			great++;
 		}
 		else
 		{
 			rotate(stack_b);
 			add_algo_link(algo, RB);
-			great++;
 		}
 		i++;
 	}
@@ -402,50 +414,19 @@ void	delete_first_number(t_nbr **nbrs)
 	*nbrs = next;
 }
 
-int		less_than_pivot(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo, t_nbr **end_part, int pivot, int size)
+void	rotate_back(int rotation, t_nbr **stack_a, t_algo **algo)
 {
 	int		i;
-	int		rotation;
-	int		greater;
 	int		size_stack_a;
-	int		first_less;
 
 	i = 0;
-	rotation = 0;
-	greater = size;
-	first_less = 1;
-	while (i < size)
-	{
-		if ((*stack_a)->value < pivot)
-		{
-			if (first_less)
-			{
-				add_nbr_front(end_part, (*stack_a)->value);
-				first_less = 0;
-			}
-			push(stack_b, stack_a);
-			add_algo_link(algo, PB);
-			greater--;
-			less++;
-		}
-		else
-		{
-			rotate(stack_a);
-			add_algo_link(algo, RA);
-			rotation++;
-			less++;
-		}
-		i++;
-	}
 	size_stack_a = size_stack(*stack_a);
-	i = 0;
 	if (rotation < size_stack_a / 2)
 	{
 		while (i < rotation)
 		{
 			reverse_rotate(stack_a);
 			add_algo_link(algo, RRA);
-			less++;
 			i++;
 		}
 	}
@@ -455,22 +436,61 @@ int		less_than_pivot(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo, t_nbr **en
 		{
 			rotate(stack_a);
 			add_algo_link(algo, RA);
-			less++;
 			i++;
 		}
 	}
-	return (greater);
 }
 
-void	print_end_part(t_nbr *end_part)
+int		send_back_to_b(int *first_less, t_ps **data, t_algo **algo, t_nbr **end_part)
 {
-	if (!end_part)
-		return ;
-	while (end_part)
+	if (*first_less)
 	{
-		//printf("end_part = %d\n", end_part->value);
-		end_part = end_part->next;
+		add_nbr_front(end_part, (*data)->stack_a->value);
+		*first_less = 0;
 	}
+	push(&((*data)->stack_b), &((*data)->stack_a));
+	add_algo_link(algo, PB);
+	return (1);
+}
+
+int		send_in_b_or_rotate(t_ps **data, int pivot, int *first_less, int *greater, t_nbr **end_part)
+{
+	int		rotation;
+
+	rotation = 0;
+	if ((*data)->stack_a->value < pivot)
+	{
+		send_back_to_b(first_less, data, &(*data)->algo, end_part);
+		*greater = *greater - 1;
+	}
+	else
+	{
+		rotate(&(*data)->stack_a);
+		add_algo_link(&(*data)->algo, RA);
+		rotation = 1;
+	}
+	return (rotation);
+}
+
+
+int		less_than_pivot(t_ps **data, t_nbr **end_part, int pivot, int size)
+{
+	int		i;
+	int		rotation;
+	int		greater;
+	int		first_less;
+
+	i = 0;
+	rotation = 0;
+	greater = size;
+	first_less = 1;
+	while (i < size)
+	{
+		rotation += send_in_b_or_rotate(data, pivot, &first_less, &greater, end_part);
+		i++;
+	}
+	rotate_back(rotation, &(*data)->stack_a, &(*data)->algo);
+	return (greater);
 }
 
 int		send_partition(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo, t_nbr **end_partition)
@@ -478,20 +498,10 @@ int		send_partition(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo, t_nbr **end
 	int		count;
 
 	count = 0;
-/*	
-	while (*end_partition != NULL)
-	{
-		printf("nb = %d\n", (*end_partition)->value);
-		*end_partition = (*end_partition)->next;
-	}
-	*/
-	//print_stacks(*stack_a, *stack_b);
 	while ((*stack_b)->value != (*end_partition)->value)
 	{
-//		printf("STACK_B = %d %d\n", (*stack_b)->value, (*end_partition)->value);
 		push(stack_a, stack_b);
 		add_algo_link(algo, PA);
-//	printf("hein\n");
 		count++;
 	}
 	push(stack_a, stack_b);
@@ -499,118 +509,159 @@ int		send_partition(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo, t_nbr **end
 	count++;
 	delete_first_number(end_partition);
 	return (count);
-} 
+}
 
-
-t_algo	*create_algo(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo)
+t_algo	**sort_two_nb_in_b(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo)
 {
-	int		*biggest_nbrs;
-	int		size_stack_a;
-	int		size_stack_b;
-	int		pivot;
-	int		not_biggest;
-	int		greater;
-	t_nbr	*end_partition;
+	if ((*stack_b)->value > (*stack_b)->next->value)
+	{
+		push(stack_a, stack_b);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+		add_algo_link(algo, PA);
+	}
+	else
+	{
+		swap(stack_b);
+		add_algo_link(algo, SB);
+		push(stack_a, stack_b);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+		add_algo_link(algo, PA);
+	}
+	return (algo);
+}
 
-	end_partition = NULL;
-	biggest_nbrs = biggest_numbers(*stack_a);
-	size_stack_a = size_stack(*stack_a);
+int		sort_three_or_two_nb(t_ps **data, int size_stack_a)
+{
 	if (size_stack_a == 3)
 	{
-		sort_only_three_nb(stack_a, algo);
-		return (*algo);
+		sort_only_three_nb(&((*data)->stack_a), &((*data)->algo));
+		return (1);
 	}
 	else if (size_stack_a == 2)
 	{
-		sort_two_nb(stack_a, algo);
-		return (*algo);
+		sort_two_nb(&((*data)->stack_a), &((*data)->algo));
+		return (1);
 	}
+	return (0);
+}
+
+int		kick_lower_and_sort(int *biggest_nbrs, int size_stack_a, t_ps **data)
+{
+	int		not_biggest;
+
 	not_biggest = 0;
 	while (not_biggest + 3 < size_stack_a)
 	{
-		if ((*stack_a)->value != biggest_nbrs[0] && (*stack_a)->value != biggest_nbrs[1] && (*stack_a)->value != biggest_nbrs[2])
+		if ((*data)->stack_a->value != biggest_nbrs[0] && (*data)->stack_a->value != biggest_nbrs[1] && (*data)->stack_a->value != biggest_nbrs[2])
 		{
-			push(stack_b, stack_a);
-			add_algo_link(algo, PB);
+			push(&((*data)->stack_b), &((*data)->stack_a));
+			add_algo_link(&((*data)->algo), PB);
 			not_biggest++;
 		}
 		else
 		{
-			rotate(stack_a);
-			add_algo_link(algo, RA);
+			rotate(&((*data)->stack_a));
+			add_algo_link(&((*data)->algo), RA);
 		}
 	}
-	sort_only_three_nb(stack_a, algo);
-	size_stack_b = size_stack(*stack_b);
-	while (size_stack_b != 0)
-	{
+	sort_only_three_nb(&((*data)->stack_a), &((*data)->algo));
+	return (1);
+}
+
+int		sort_one_or_two_in_b(int size_stack_b, t_ps **data)
+{
 		if (size_stack_b == 2)
 		{
-			if ((*stack_b)->value > (*stack_b)->next->value)
-			{
-				push(stack_a, stack_b);
-				add_algo_link(algo, PA);
-				push(stack_a, stack_b);
-				add_algo_link(algo, PA);
-			}
-			else
-			{
-				swap(stack_b);
-				add_algo_link(algo, SB);
-				push(stack_a, stack_b);
-				add_algo_link(algo, PA);
-				push(stack_a, stack_b);
-				add_algo_link(algo, PA);
-			}
-			break ;
+			sort_two_nb_in_b(&((*data)->stack_a), &((*data)->stack_b), &((*data)->algo));
+			return (1);
 		}
 		else if (size_stack_b == 1)
 		{
-			add_algo_link(algo, PA);
-			push(stack_a, stack_b);
-			break ;
+			add_algo_link(&((*data)->algo), PA);
+			push(&((*data)->stack_a), &((*data)->stack_b));
+			return (1);
 		}
-		if (end_partition)
-			greater = send_partition(stack_a, stack_b, algo, &end_partition);
-		else
-		{
-			pivot = find_pivot(*stack_b, size_stack_b);
-			greater = greater_than_pivot(stack_a, stack_b, algo, pivot);
-		}
-		while (greater > 3)
-		{
-			pivot = find_pivot(*stack_a, greater);
-			greater = less_than_pivot(stack_a, stack_b, algo, &end_partition, pivot, greater);
-		}
-		if (greater == 3)
-			sort_three_nb(stack_a, stack_b, algo);
-		else if (greater == 2)
-			sort_two_nb(stack_a, algo);
-		print_end_part(end_partition);
-		size_stack_b = size_stack(*stack_b);
-	}
-	return (*algo);
+		return (0);
 }
 
+int		send_greater_than_pivot_in_a(t_nbr **end_partition, t_ps **data, int size_stack_b)
+{
+	int		greater;
+	int		pivot;
+
+	if (*end_partition)
+		greater = send_partition(&((*data)->stack_a), &((*data)->stack_b), &((*data)->algo), end_partition);
+	else
+	{
+		pivot = find_pivot((*data)->stack_b, size_stack_b);
+		greater = greater_than_pivot(&((*data)->stack_a), &((*data)->stack_b), &((*data)->algo), pivot);
+	}
+	return (greater);
+}
+
+int		send_back_in_a_and_sort(int greater, t_ps **data, t_nbr **end_partition)
+{
+	int		pivot;
+
+	while (greater > 3)
+	{
+		pivot = find_pivot((*data)->stack_a, greater);
+		greater = less_than_pivot(data, end_partition, pivot, greater);
+	}
+	if (greater == 3)
+		sort_three_nb(&((*data)->stack_a), &((*data)->stack_b), &((*data)->algo));
+	else if (greater == 2)
+		sort_two_nb(&((*data)->stack_a), &((*data)->algo));
+	return (1);
+}
+
+t_algo	*create_algo(t_ps **data)
+{
+	int		*biggest_nbrs;
+	int		size_stack_b;
+	int		size_stack_a;
+	int		greater;
+	t_nbr	*end_partition;
+
+	end_partition = NULL;
+	biggest_nbrs = biggest_numbers((*data)->stack_a);
+	size_stack_a = size_stack((*data)->stack_a);
+	if (sort_three_or_two_nb(data, size_stack_a))
+		return ((*data)->algo);
+	kick_lower_and_sort(biggest_nbrs, size_stack_a, data);
+	size_stack_b = size_stack((*data)->stack_b);
+	while (size_stack_b != 0)
+	{
+		if (sort_one_or_two_in_b(size_stack_b, data))
+			break ;
+		greater = send_greater_than_pivot_in_a(&end_partition, data, size_stack_b);
+		send_back_in_a_and_sort(greater, data, &end_partition);
+		size_stack_b = size_stack((*data)->stack_b);
+	}
+	return ((*data)->algo);
+}
 
 int		main(int argc, char **argv)
 {
-	t_nbr		*stack_a;
-	t_nbr		*stack_b;
-	t_algo		*algo;
+	t_ps		*data;
 
 	(void)argc;
 	if (argc < 2)
 		return (0);
-	if (!(stack_a = check_args(argv)))
+	if (!(data = malloc(sizeof(t_ps) * (1))))
+			return (0);
+	if (!(data->stack_a = check_args(argv)))
 	{
 		ft_putstr("Error\n");
 		return (1);
 	}
-	stack_b = NULL;
-	algo = NULL;
-	create_algo(&stack_a, &stack_b, &algo);
-	print_algo(algo);
+	data->stack_b = NULL;
+	data->algo = NULL;
+	create_algo(&data);
+	print_algo(data->algo);
+	free(data);
 //	print_stacks(stack_a, stack_b);
 	//printf("less = %d | greater = %d\n", less, great);
 	return (0);
