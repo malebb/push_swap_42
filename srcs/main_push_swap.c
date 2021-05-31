@@ -6,45 +6,61 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/30 14:27:12 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/05/31 12:01:06 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+int	print_rotation(t_algo *algo)
+{
+	int		found;
+
+	found = 1;
+	if (algo->instru == 5)
+		ft_putstr("ra\n");
+	else if (algo->instru == 6)
+		ft_putstr("rb\n");
+	else if (algo->instru == 7)
+		ft_putstr("rr\n");
+	else if (algo->instru == 8)
+		ft_putstr("rra\n");
+	else if (algo->instru == 9)
+		ft_putstr("rrb\n");
+	else if (algo->instru == 10)
+		ft_putstr("rrr\n");
+	else
+		found = 0;
+	return (found);
+}
+
 void	print_algo(t_algo *algo)
 {
 	int		count_instruction;
+	int		is_rotation;
 
 	count_instruction = 0;
 	while (algo)
 	{
-		if (algo->instru == 0)
-			ft_putstr("sa\n");
-		else if (algo->instru == 1)
-			ft_putstr("sb\n");
-		else if (algo->instru == 2)
-			ft_putstr("ss\n");
-		else if (algo->instru == 3)
-			ft_putstr("pa\n");
-		else if (algo->instru == 4)
-			ft_putstr("pb\n");
-		else if (algo->instru == 5)
-			ft_putstr("ra\n");
-		else if (algo->instru == 6)
-			ft_putstr("rb\n");
-		else if (algo->instru == 7)
-			ft_putstr("rr\n");
-		else if (algo->instru == 8)
-			ft_putstr("rra\n");
-		else if (algo->instru == 9)
-			ft_putstr("rrb\n");
-		else if (algo->instru == 10)
-			ft_putstr("rrr\n");
+		is_rotation = print_rotation(algo);
+		if (!is_rotation)
+		{
+			if (algo->instru == 0)
+				ft_putstr("sa\n");
+			else if (algo->instru == 1)
+				ft_putstr("sb\n");
+			else if (algo->instru == 2)
+				ft_putstr("ss\n");
+			else if (algo->instru == 3)
+				ft_putstr("pa\n");
+			else if (algo->instru == 4)
+				ft_putstr("pb\n");
+		}
 		algo = algo->next;
 		count_instruction++;
 	}
 }
+
 /*
 static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 {
@@ -70,25 +86,27 @@ static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 	}
 }
 */
+
 static t_algo	*new_algo_link(t_instruction instru)
 {
 	t_algo		*algo_link;
 
-	if (!(algo_link = malloc(sizeof(t_algo) * (1))))
+	algo_link = malloc(sizeof(t_algo) * (1));
+	if (!algo_link)
 		return (NULL);
 	algo_link->instru = instru;
 	algo_link->next = NULL;
 	return (algo_link);
 }
 
-
-static int		add_algo_link(t_algo **begin_algo, t_instruction instru)
+static int add_algo_link(t_algo **begin_algo, t_instruction instru)
 {
 	t_algo			*first_algo_link;
 
 	if (!(*begin_algo))
 	{
-		if (!(*begin_algo = new_algo_link(instru)))
+		*begin_algo = new_algo_link(instru);
+		if (!(*begin_algo))
 			return (0);
 	}
 	else
@@ -96,28 +114,23 @@ static int		add_algo_link(t_algo **begin_algo, t_instruction instru)
 		first_algo_link = *begin_algo;
 		while ((*begin_algo)->next != 0)
 			*begin_algo = (*begin_algo)->next;
-		if (!((*begin_algo)->next = new_algo_link(instru)))
+		(*begin_algo)->next = new_algo_link(instru);
+		if (!(*begin_algo)->next)
 			return (0);
 		*begin_algo = first_algo_link;
 	}
 	return (1);
 }
 
-int		*biggest_numbers(t_nbr *stack_a)
+void	first_or_second_biggest(t_nbr *stack_a, int *biggest_nbrs,
+		t_nbr *first_nb)
 {
-	int		*biggest_nbrs;
-	t_nbr	*first_nb;
 	int		count;
 
-	first_nb = stack_a;
-	if (!(biggest_nbrs = malloc(sizeof(int) * 3)))
-		return (0);
 	count = 0;
 	while (stack_a)
 	{
-		if (!count)
-			biggest_nbrs[0] = stack_a->value;
-		if (biggest_nbrs[0] < stack_a->value)
+		if (!count || biggest_nbrs[0] < stack_a->value)
 			biggest_nbrs[0] = stack_a->value;
 		stack_a = stack_a->next;
 		count = 1;
@@ -134,13 +147,27 @@ int		*biggest_numbers(t_nbr *stack_a)
 		if (count && biggest_nbrs[1] < stack_a->value && stack_a->value
 			!= biggest_nbrs[0])
 			biggest_nbrs[1] = stack_a->value;
-		stack_a = stack_a->next;	
+		stack_a = stack_a->next;
 	}
+}
+
+int	*biggest_numbers(t_nbr *stack_a)
+{
+	int		*biggest_nbrs;
+	t_nbr	*first_nb;
+	int		count;
+
+	first_nb = stack_a;
+	biggest_nbrs = malloc(sizeof(int) * 3);
+	if (!biggest_nbrs)
+		return (0);
+	first_or_second_biggest(stack_a, biggest_nbrs, first_nb);
 	stack_a = first_nb;
 	count = 0;
 	while (stack_a)
 	{
-		if (!count && stack_a->value != biggest_nbrs[0] && stack_a->value != biggest_nbrs[1])
+		if (!count && stack_a->value != biggest_nbrs[0]
+			&& stack_a->value != biggest_nbrs[1])
 		{
 			biggest_nbrs[2] = stack_a->value;
 			count = 1;
@@ -153,7 +180,7 @@ int		*biggest_numbers(t_nbr *stack_a)
 	return (biggest_nbrs);
 }
 
-int		size_stack(t_nbr *stack)
+int	size_stack(t_nbr *stack)
 {
 	int		size;
 
@@ -181,81 +208,130 @@ t_algo	*sort_two_nb(t_nbr **stack_a, t_algo **algo)
 	return (*algo);
 }
 
+t_algo	*sort_three_nb_first_lower(t_nbr **stack_a, t_nbr **stack_b,
+		t_algo **algo)
+{
+	t_nbr		*second;
+	t_nbr		*third;
+
+	second = (*stack_a)->next;
+	third = (*stack_a)->next->next;
+	if (second->value > third->value)
+	{
+		add_algo_link(algo, PB);
+		push(stack_b, stack_a);
+		add_algo_link(algo, SA);
+		swap(stack_a);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+	}
+	return (*algo);
+}
+
+t_algo	*sort_three_nb_first_between(t_nbr **stack_a, t_nbr **stack_b,
+		t_algo **algo)
+{
+	t_nbr		*second;
+	t_nbr		*third;
+
+	second = (*stack_a)->next;
+	third = (*stack_a)->next->next;
+	if (second->value < third->value)
+	{
+		swap(stack_a);
+		add_algo_link(algo, SA);
+	}
+	else
+	{
+		push(stack_b, stack_a);
+		add_algo_link(algo, PB);
+		swap(stack_a);
+		add_algo_link(algo, SA);
+		push(stack_a, stack_b);
+		add_algo_link(algo, PA);
+		swap(stack_a);
+		add_algo_link(algo, SA);
+	}
+	return (*algo);
+}
+
+t_algo	*sort_three_nb_first_greater(t_nbr **stack_a, t_nbr **stack_b,
+		t_algo **algo, int *sorted)
+{
+	t_nbr		*second;
+	t_nbr		*third;
+
+	second = (*stack_a)->next;
+	third = (*stack_a)->next->next;
+	if (second->value < third->value)
+	{
+		add_algo_link(algo, PB);
+		push(stack_b, stack_a);
+		add_algo_link(algo, PB);
+		push(stack_b, stack_a);
+		add_algo_link(algo, SB);
+		swap(stack_b);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+		add_algo_link(algo, SA);
+		swap(stack_a);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+	}
+	else
+		*sorted = 0;
+	return (*algo);
+}
+
+t_algo	*sort_three_nb_first_greater_2(t_nbr **stack_a, t_nbr **stack_b,
+		t_algo **algo, int sorted)
+{
+	t_nbr		*second;
+	t_nbr		*third;
+
+	second = (*stack_a)->next;
+	third = (*stack_a)->next->next;
+	if (!sorted && second->value > third->value)
+	{
+		add_algo_link(algo, PB);
+		push(stack_b, stack_a);
+		add_algo_link(algo, SA);
+		swap(stack_a);
+		add_algo_link(algo, PB);
+		push(stack_b, stack_a);
+		add_algo_link(algo, SB);
+		swap(stack_b);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+		add_algo_link(algo, SA);
+		swap(stack_a);
+		add_algo_link(algo, PA);
+		push(stack_a, stack_b);
+	}
+	return (*algo);
+}
+
 t_algo	*sort_three_nb(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo)
 {
 	t_nbr		*first;
 	t_nbr		*second;
 	t_nbr		*third;
+	int			sorted;
 
 	first = (*stack_a);
 	second = (*stack_a)->next;
 	third = (*stack_a)->next->next;
 	if (first->value < second->value && first->value < third->value)
-	{
-		if (second->value > third->value)
-		{
-			add_algo_link(algo, PB);
-			push(stack_b, stack_a);
-			add_algo_link(algo, SA);
-			swap(stack_a);
-			add_algo_link(algo, PA);
-			push(stack_a, stack_b);
-		}
-	}
+		sort_three_nb_first_lower(stack_a, stack_b, algo);
 	else if (first->value > second->value && first->value > third->value)
 	{
-		if (second->value < third->value)
-		{
-			add_algo_link(algo, PB);
-			push(stack_b, stack_a);
-			add_algo_link(algo, PB);
-			push(stack_b, stack_a);
-			add_algo_link(algo, SB);
-			swap(stack_b);
-			add_algo_link(algo, PA);
-			push(stack_a, stack_b);
-			add_algo_link(algo, SA);
-			swap(stack_a);
-			add_algo_link(algo, PA);
-			push(stack_a, stack_b);
-		}
-		else if (second->value > third->value)
-		{
-			add_algo_link(algo, PB);
-			push(stack_b, stack_a);
-			add_algo_link(algo, SA);
-			swap(stack_a);
-			add_algo_link(algo, PB);
-			push(stack_b, stack_a);
-			add_algo_link(algo, SB);
-			swap(stack_b);
-			add_algo_link(algo, PA);
-			push(stack_a, stack_b);
-			add_algo_link(algo, SA);
-			swap(stack_a);
-			add_algo_link(algo, PA);
-			push(stack_a, stack_b);
-		}
+		sorted = 1;
+		sort_three_nb_first_greater(stack_a, stack_b, algo, &sorted);
+		sort_three_nb_first_greater_2(stack_a, stack_b, algo, sorted);
 	}
 	else
 	{
-		if (second->value < third->value)
-		{
-			swap(stack_a);
-			add_algo_link(algo, SA);
-		}
-		else
-		{
-			push(stack_b, stack_a);
-			add_algo_link(algo, PB);
-			swap(stack_a);
-			add_algo_link(algo, SA);
-			push(stack_a, stack_b);
-			add_algo_link(algo, PA);
-			swap(stack_a);
-			add_algo_link(algo, SA);
-		}
-
+		sort_three_nb_first_between(stack_a, stack_b, algo);
 	}
 	return (*algo);
 }
