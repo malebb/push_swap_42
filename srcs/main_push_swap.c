@@ -434,6 +434,7 @@ int	find_pivot(t_nbr *stack, int size)
 {
 	int		*nbrs;
 	int		i;
+	int		pivot;
 
 	nbrs = malloc(sizeof(int) * size);
 	if (!nbrs)
@@ -446,7 +447,9 @@ int	find_pivot(t_nbr *stack, int size)
 		i++;
 	}
 	sort_int(nbrs, size);
-	return (nbrs[size / 2]);
+	pivot = nbrs[size / 2];
+	free(nbrs);
+	return (pivot);
 }
 
 int	greater_than_pivot(t_nbr **stack_a, t_nbr **stack_b,
@@ -630,6 +633,8 @@ t_algo	**sort_two_nb_in_b(t_nbr **stack_a, t_nbr **stack_b, t_algo **algo)
 
 int	sort_three_or_two_nb(t_ps **data, int size_stack_a)
 {
+	if (size_stack_a == 1)
+		return (1);
 	if (size_stack_a == 3)
 	{
 		sort_only_three_nb(&((*data)->stack_a), &((*data)->algo));
@@ -732,7 +737,7 @@ int	send_back_in_a_and_sort(int greater, t_ps **data)
 	return (1);
 }
 
-t_algo	*create_algo(t_ps **data)
+int	create_algo(t_ps **data)
 {
 	int		*biggest_nbrs;
 	int		size_stack_b;
@@ -740,12 +745,12 @@ t_algo	*create_algo(t_ps **data)
 	int		greater;
 
 	(*data)->end_part = NULL;
-	biggest_nbrs = biggest_numbers((*data)->stack_a);
 	size_stack_a = size_stack((*data)->stack_a);
+	biggest_nbrs = biggest_numbers((*data)->stack_a);
 	if (sort_three_or_two_nb(data, size_stack_a))
 	{
 		free(biggest_nbrs);
-		return ((*data)->algo);
+		return (1);
 	}
 	kick_lower_and_sort(biggest_nbrs, size_stack_a, data);
 	free(biggest_nbrs);
@@ -757,11 +762,11 @@ t_algo	*create_algo(t_ps **data)
 		greater = send_greater_than_pivot_in_a(&((*data)->end_part),
 				data, size_stack_b);
 		if (greater == -1)
-			return (NULL);
+			return (0);
 		send_back_in_a_and_sort(greater, data);
 		size_stack_b = size_stack((*data)->stack_b);
 	}
-	return ((*data)->algo);
+	return (1);
 }
 
 
@@ -777,12 +782,31 @@ void	free_stack(t_nbr **stack)
 		previous = *stack;
 		*stack = (*stack)->next;
 	}
+	if (previous)
+		free(previous);
+}
+
+void	free_algo(t_algo **algo)
+{
+	t_algo		*previous;
+
+	previous = NULL;
+	while (*algo)
+	{
+		if (previous)
+			free(previous);
+		previous = *algo;
+		*algo = (*algo)->next;
+	}
+	if (previous)
+		free(previous);
 }
 
 void	free_data(t_ps **data)
 {
 	free_stack(&(*data)->stack_a);
 	free_stack(&(*data)->stack_b);
+	free_algo(&(*data)->algo);
 	free(*data);
 }
 
@@ -794,10 +818,12 @@ int	main(int argc, char **argv)
 		return (0);
 	data = malloc(sizeof(t_ps) * (1));
 	if (!data)
-		return (0);
+		return (1);
 	data->stack_a = check_args(argv);
 	if (!data->stack_a)
 	{
+		free_stack(&(data->stack_a));
+		free(data);
 		ft_putstr("Error\n");
 		return (1);
 	}

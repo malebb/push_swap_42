@@ -121,6 +121,8 @@ void	free_stack(t_nbr **stack)
 		previous = *stack;
 		*stack = (*stack)->next;
 	}
+	if (previous)
+		free(previous);
 }
 
 void	free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b,

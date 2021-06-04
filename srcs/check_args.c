@@ -65,6 +65,9 @@ t_nbr	*check_args(char *argv[])
 	if (!stack_a)
 		return (NULL);
 	if (!check_duplicates(stack_a))
+	{
+		free_stack(&stack_a);
 		return (NULL);
+	}
 	return (stack_a);
 }

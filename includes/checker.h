@@ -35,5 +35,6 @@ void				reverse_rotate(t_nbr **stack);
 t_nbr				*stock_numbers(char *argv[]);
 int					count_nbr(t_nbr *nbrs);
 long long int		ft_atoi(char *nbr);
+void	free_stack(t_nbr **stack);
 
 #endif
