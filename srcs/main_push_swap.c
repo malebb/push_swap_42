@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/03 14:44:08 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/04 11:37:51 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int	size_stack(t_nbr *stack)
 	return (size);
 }
 
-t_algo	*sort_two_nb(t_nbr **stack_a, t_algo **algo)
+int		sort_two_nb(t_nbr **stack_a, t_algo **algo)
 {
 	t_nbr		*first;
 	t_nbr		*second;
@@ -203,10 +203,10 @@ t_algo	*sort_two_nb(t_nbr **stack_a, t_algo **algo)
 	if (first->value > second->value)
 	{
 		if (!add_algo_link(algo, SA))
-			return (NULL);
+			return (0);
 		swap(stack_a);
 	}
-	return (*algo);
+	return (1);
 }
 
 t_algo	*sort_three_nb_first_lower(t_nbr **stack_a, t_nbr **stack_b,
@@ -780,6 +780,6 @@ int	main(int argc, char **argv)
 	if (!create_algo(&data))
 		return (1);
 	print_algo(data->algo);
-	free_data(&data);
+//	free_data(&data);
 	return (0);
 }

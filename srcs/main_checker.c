@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/03 14:40:39 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/04 09:38:24 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,17 @@ void	free_stack(t_nbr **stack)
 	t_nbr		*previous;
 
 	previous = NULL;
-	 while (*stack)
-	 {
-		 if (previous)
+	while (*stack)
+	{
+		if (previous)
 			free(previous);
-		 previous = *stack;
-		 *stack = (*stack)->next;
-	 }
+		previous = *stack;
+		*stack = (*stack)->next;
+	}
 }
 
-void	free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b, char **instruction)
+void	free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b,
+		char **instruction)
 {
 	free_stack(stack_a);
 	free_stack(stack_b);
