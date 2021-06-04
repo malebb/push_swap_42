@@ -743,8 +743,12 @@ t_algo	*create_algo(t_ps **data)
 	biggest_nbrs = biggest_numbers((*data)->stack_a);
 	size_stack_a = size_stack((*data)->stack_a);
 	if (sort_three_or_two_nb(data, size_stack_a))
+	{
+		free(biggest_nbrs);
 		return ((*data)->algo);
+	}
 	kick_lower_and_sort(biggest_nbrs, size_stack_a, data);
+	free(biggest_nbrs);
 	size_stack_b = size_stack((*data)->stack_b);
 	while (size_stack_b != 0)
 	{
@@ -758,6 +762,28 @@ t_algo	*create_algo(t_ps **data)
 		size_stack_b = size_stack((*data)->stack_b);
 	}
 	return ((*data)->algo);
+}
+
+
+void	free_stack(t_nbr **stack)
+{
+	t_nbr		*previous;
+
+	previous = NULL;
+	while (*stack)
+	{
+		if (previous)
+			free(previous);
+		previous = *stack;
+		*stack = (*stack)->next;
+	}
+}
+
+void	free_data(t_ps **data)
+{
+	free_stack(&(*data)->stack_a);
+	free_stack(&(*data)->stack_b);
+	free(*data);
 }
 
 int	main(int argc, char **argv)
@@ -780,6 +806,6 @@ int	main(int argc, char **argv)
 	if (!create_algo(&data))
 		return (1);
 	print_algo(data->algo);
-//	free_data(&data);
+	free_data(&data);
 	return (0);
 }
