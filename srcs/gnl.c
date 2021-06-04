@@ -6,13 +6,13 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:40:59 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/29 10:42:30 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/03 14:01:39 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-static void		strncpy_from(char *dest, char *src, int n, int from)
+static void	strncpy_from(char *dest, char *src, int n, int from)
 {
 	int		i;
 
@@ -25,7 +25,7 @@ static void		strncpy_from(char *dest, char *src, int n, int from)
 	dest[from + i] = '\0';
 }
 
-static int		add_to_line(char **line, char buf[1001])
+static int	add_to_line(char **line, char buf[1001])
 {
 	int		size_line;
 	char	*tmp;
@@ -39,10 +39,12 @@ static int		add_to_line(char **line, char buf[1001])
 	line_read = 0;
 	if (buf[byte_to_add] == '\n')
 		line_read = 1;
-	if (!(tmp = ft_strdup(*line)))
+	tmp = ft_strdup(*line);
+	if (!tmp)
 		return (-1);
 	free(*line);
-	if (!(*line = malloc(sizeof(char) * (size_line + byte_to_add + 1))))
+	*line = malloc(sizeof(char) * (size_line + byte_to_add + 1));
+	if (!(*line))
 		return (-1);
 	strncpy_from(*line, tmp, size_line, 0);
 	free(tmp);
@@ -51,7 +53,7 @@ static int		add_to_line(char **line, char buf[1001])
 	return (line_read);
 }
 
-static int		finish_buf(char **line, char *buf)
+static int	finish_buf(char **line, char *buf)
 {
 	int		line_read;
 
@@ -63,28 +65,40 @@ static int		finish_buf(char **line, char *buf)
 	return (0);
 }
 
-int				gnl(char **line)
+int	init_line(char **line)
+{
+	*line = malloc(sizeof(char) * (1));
+	if (!(*line))
+		return (-1);
+	*line[0] = '\0';
+	return (1);
+}
+
+int	gnl(char **line)
 {
 	static char		buf[1001] = {0};
 	int				byte_read;
 	int				line_read;
 
-	if (!(*line = malloc(sizeof(char) * (1))))
+	if (init_line(line) == -1)
 		return (-1);
-	*line[0] = '\0';
-	if ((line_read = finish_buf(line, buf)) == -1)
+	line_read = finish_buf(line, buf);
+	if (line_read == -1)
 		return (-1);
 	if (line_read)
 		return (1);
-	while ((byte_read = read(0, buf, 1000)))
+	byte_read = read(0, buf, 1000);
+	while (byte_read)
 	{
 		if (byte_read == -1)
 			return (-1);
 		buf[byte_read] = '\0';
-		if ((line_read = add_to_line(line, buf)) == -1)
+		line_read = add_to_line(line, buf);
+		if (line_read == -1)
 			return (-1);
 		if (line_read)
 			return (1);
+		byte_read = read(0, buf, 1000);
 	}
 	return (0);
 }

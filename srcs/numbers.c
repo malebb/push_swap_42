@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:39:21 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/18 11:40:18 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/03 14:04:43 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@ t_nbr	*new_nbr(long long int nb)
 {
 	t_nbr		*nbr;
 
-	if (!(nbr = malloc(sizeof(t_nbr) * (1))))
+	nbr = malloc(sizeof(t_nbr) * (1));
+	if (!nbr)
 		return (NULL);
 	nbr->value = (int)nb;
 	nbr->next = NULL;
 	return (nbr);
 }
 
-static int		add_nbr(t_nbr **nbrs, long long int nb)
+static int	add_nbr(t_nbr **nbrs, long long int nb)
 {
 	t_nbr		*first_nb;
 
 	if (!(*nbrs))
 	{
-		if (!(*nbrs = new_nbr(nb)))
+		*nbrs = new_nbr(nb);
+		if (!(*nbrs))
 			return (0);
 	}
 	else
@@ -37,14 +39,15 @@ static int		add_nbr(t_nbr **nbrs, long long int nb)
 		first_nb = *nbrs;
 		while ((*nbrs)->next != 0)
 			*nbrs = (*nbrs)->next;
-		if (!((*nbrs)->next = new_nbr(nb)))
+		(*nbrs)->next = new_nbr(nb);
+		if (!(*nbrs)->next)
 			return (0);
 		*nbrs = first_nb;
 	}
 	return (1);
 }
 
-t_nbr			*stock_numbers(char *argv[])
+t_nbr	*stock_numbers(char *argv[])
 {
 	int				i;
 	t_nbr			*nbrs;
@@ -64,7 +67,7 @@ t_nbr			*stock_numbers(char *argv[])
 	return (nbrs);
 }
 
-int				count_nbr(t_nbr *nbrs)
+int	count_nbr(t_nbr *nbrs)
 {
 	int		count;
 

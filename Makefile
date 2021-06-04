@@ -6,7 +6,7 @@
 #    By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/17 19:40:00 by mlebrun           #+#    #+#              #
-#    Updated: 2021/05/18 14:40:19 by mlebrun          ###   ########.fr        #
+#    Updated: 2021/05/31 13:57:43 by mlebrun          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,10 +47,10 @@ RM	= rm -rf
 all:		${NAME1} ${NAME2}
 
 $(NAME1):	${OBJS} ${OBJS_CHECKER} ${OBJS_CHECKER} ${OBJS_FT}
-			${CC} -o ${NAME1} ${OBJS} ${OBJS_CHECKER} ${OBJS_FT} ${CFLAGS} -fsanitize=address
+			${CC} -o ${NAME1} ${OBJS} ${OBJS_CHECKER} ${OBJS_FT} ${CFLAGS} -fsanitize=address -g3
 
 $(NAME2):	${OBJS} ${OBJS_PUSH_SWAP} ${OBJS_FT}
-			${CC} -o ${NAME2} ${OBJS} ${OBJS_PUSH_SWAP} ${OBJS_FT}  ${CFLAGS} -fsanitize=address
+			${CC} -o ${NAME2} ${OBJS} ${OBJS_PUSH_SWAP} ${OBJS_FT}  ${CFLAGS} -fsanitize=address -g3
 
 clean:
 			${RM} ${OBJS}

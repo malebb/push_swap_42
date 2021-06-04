@@ -6,13 +6,14 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/05/28 11:04:50 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/03 14:40:39 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-static int		apply_rotation(t_nbr **stack_a, t_nbr **stack_b, char *instruction)
+static int	apply_rotation(t_nbr **stack_a, t_nbr **stack_b,
+			char *instruction)
 {
 	if (!ft_strcmp(instruction, "ra"))
 		rotate(stack_a);
@@ -37,7 +38,7 @@ static int		apply_rotation(t_nbr **stack_a, t_nbr **stack_b, char *instruction)
 	return (1);
 }
 
-static int		apply_instruction(t_nbr **stack_a, t_nbr **stack_b,
+static int	apply_instruction(t_nbr **stack_a, t_nbr **stack_b,
 				char *instruction)
 {
 	if (!ft_strcmp(instruction, "sa"))
@@ -58,7 +59,7 @@ static int		apply_instruction(t_nbr **stack_a, t_nbr **stack_b,
 	return (1);
 }
 
-static int		is_sorted(t_nbr *stack)
+static int	is_sorted(t_nbr *stack)
 {
 	int		previous_value;
 	int		first_nb;
@@ -74,8 +75,8 @@ static int		is_sorted(t_nbr *stack)
 	}
 	return (1);
 }
-
-static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
+/*
+static void	print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 {
 	printf("A   |   B\n\n");
 	while (stack_a || stack_b)
@@ -98,10 +99,38 @@ static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
 		}
 	}
 }
+*/
 
-int		nb_instruction;
+void	ok_or_ko(t_nbr *stack_a, t_nbr *stack_b)
+{
+	if (!stack_b && is_sorted(stack_a))
+		ft_putstr("OK\n");
+	else
+		ft_putstr("KO\n");
+}
 
-int				main(int argc, char *argv[])
+void	free_stack(t_nbr **stack)
+{
+	t_nbr		*previous;
+
+	previous = NULL;
+	 while (*stack)
+	 {
+		 if (previous)
+			free(previous);
+		 previous = *stack;
+		 *stack = (*stack)->next;
+	 }
+}
+
+void	free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b, char **instruction)
+{
+	free_stack(stack_a);
+	free_stack(stack_b);
+	free(*instruction);
+}
+
+int	main(int argc, char *argv[])
 {
 	t_nbr		*stack_a;
 	t_nbr		*stack_b;
@@ -109,13 +138,13 @@ int				main(int argc, char *argv[])
 
 	if (argc < 2)
 		return (1);
-	if (!(stack_a = check_args(argv)))
+	stack_a = check_args(argv);
+	if (!stack_a)
 	{
 		ft_putstr("Error\n");
 		return (1);
 	}
 	stack_b = NULL;
-	nb_instruction = 0;
 	while (gnl(&instruction))
 	{
 		if (!apply_instruction(&stack_a, &stack_b, instruction))
@@ -123,13 +152,9 @@ int				main(int argc, char *argv[])
 			ft_putstr("Error\n");
 			return (1);
 		}
-		nb_instruction++;
+		free(instruction);
 	}
-	print_stacks(stack_a, stack_b);
-	printf("nb_instruction = %d\n", nb_instruction);
-	if (!stack_b && is_sorted(stack_a))
-		ft_putstr("OK\n");
-	else
-		ft_putstr("KO\n");
+	free_stacks_and_instruction(&stack_a, &stack_b, &instruction);
+	ok_or_ko(stack_a, stack_b);
 	return (0);
 }

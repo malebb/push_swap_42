@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:04:19 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/30 10:05:12 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/03 11:58:31 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define TRUE	1
 # define FALSE	0
 
-typedef struct		s_nbr
+typedef struct s_nbr
 {
 	int				value;
 	struct s_nbr	*next;

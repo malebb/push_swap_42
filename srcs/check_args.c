@@ -6,13 +6,13 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:38:45 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/29 10:38:53 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/03 13:52:41 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-static int		only_numbers(char *argv[])
+static int	only_numbers(char *argv[])
 {
 	int		i;
 	int		j;
@@ -34,7 +34,7 @@ static int		only_numbers(char *argv[])
 	return (TRUE);
 }
 
-static int		check_duplicates(t_nbr *nbr)
+static int	check_duplicates(t_nbr *nbr)
 {
 	t_nbr		*first_nbr;
 	t_nbr		*nbr_passed;
@@ -55,13 +55,14 @@ static int		check_duplicates(t_nbr *nbr)
 	return (1);
 }
 
-t_nbr			*check_args(char *argv[])
+t_nbr	*check_args(char *argv[])
 {
 	t_nbr		*stack_a;
 
 	if (!only_numbers(argv))
 		return (NULL);
-	if (!(stack_a = stock_numbers(argv)))
+	stack_a = stock_numbers(argv);
+	if (!stack_a)
 		return (NULL);
 	if (!check_duplicates(stack_a))
 		return (NULL);

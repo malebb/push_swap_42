@@ -6,11 +6,11 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:08 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/04/29 10:37:11 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/03 14:14:50 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strlen(const char *str)
+int	ft_strlen(const char *str)
 {
 	int		len;
 
