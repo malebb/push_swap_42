@@ -58,11 +58,11 @@ RM	= rm -rf
 
 all:		${NAME1} ${NAME2}
 
-$(NAME1):	${OBJS} ${OBJS_CHECKER} ${OBJS_CHECKER} ${OBJS_FT}
-			${CC} -o ${NAME1} ${OBJS} ${OBJS_CHECKER} ${OBJS_FT} ${CFLAGS} -fsanitize=address -g3
+$(NAME1):	${OBJS} ${OBJS_CHECKER} ${OBJS_FT}
+			${CC} -o ${NAME1} ${OBJS} ${OBJS_CHECKER} ${OBJS_FT} ${CFLAGS}
 
 $(NAME2):	${OBJS} ${OBJS_PUSH_SWAP} ${OBJS_FT}
-			${CC} -o ${NAME2} ${OBJS} ${OBJS_PUSH_SWAP} ${OBJS_FT}  ${CFLAGS} -fsanitize=address -g3
+			${CC} -o ${NAME2} ${OBJS} ${OBJS_PUSH_SWAP} ${OBJS_FT}  ${CFLAGS}
 
 clean:
 			${RM} ${OBJS}

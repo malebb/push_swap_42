@@ -12,32 +12,6 @@
 
 #include "push_swap.h"
 
-/*
-static void		print_stacks(t_nbr *stack_a, t_nbr *stack_b)
-{
-	printf("A   |   B\n\n");
-	while (stack_a || stack_b)
-	{
-		if (stack_a && stack_b)
-		{
-			printf("%d   |   %d\n", stack_a->value, stack_b->value);
-			stack_a = stack_a->next;
-			stack_b = stack_b->next;
-		}
-		else if (stack_a && !stack_b)
-		{
-			printf("%d   |   -\n", stack_a->value);
-			stack_a = stack_a->next;
-		}
-		else if (!stack_a && stack_b)
-		{
-			printf("-   |   %d\n", stack_b->value);
-			stack_b = stack_b->next;
-		}
-	}
-}
-*/
-
 int	init_sorting(t_ps **data)
 {
 	int		size_stack_a;
