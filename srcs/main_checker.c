@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/04 09:38:24 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/06 10:54:56 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,28 +107,6 @@ void	ok_or_ko(t_nbr *stack_a, t_nbr *stack_b)
 		ft_putstr("OK\n");
 	else
 		ft_putstr("KO\n");
-}
-
-void	free_stack(t_nbr **stack)
-{
-	t_nbr		*previous;
-
-	previous = NULL;
-	while (*stack)
-	{
-		if (previous)
-			free(previous);
-		previous = *stack;
-		*stack = (*stack)->next;
-	}
-}
-
-void	free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b,
-		char **instruction)
-{
-	free_stack(stack_a);
-	free_stack(stack_b);
-	free(*instruction);
 }
 
 int	main(int argc, char *argv[])

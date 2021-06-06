@@ -6,7 +6,7 @@
 #    By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/17 19:40:00 by mlebrun           #+#    #+#              #
-#    Updated: 2021/05/31 13:57:43 by mlebrun          ###   ########.fr        #
+#    Updated: 2021/06/06 10:57:54 by mlebrun          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ SRCS = srcs/check_args.c \
 	   srcs/numbers.c \
 
 SRCS_CHECKER = srcs/main_checker.c \
-			   srcs/gnl.c
+			   srcs/gnl.c \
+			   srcs/free_checker.c \
 
 SRCS_PUSH_SWAP = srcs/main_push_swap.c
 
