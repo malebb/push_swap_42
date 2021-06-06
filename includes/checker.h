@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:04:19 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/06 10:58:48 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/06 11:03:05 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void				reverse_rotate(t_nbr **stack);
 t_nbr				*stock_numbers(char *argv[]);
 int					count_nbr(t_nbr *nbrs);
 long long int		ft_atoi(char *nbr);
+
 void				free_stack(t_nbr **stack);
 void				free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b,
 					char **instruction);
-
 #endif

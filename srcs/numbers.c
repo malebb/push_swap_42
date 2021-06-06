@@ -59,7 +59,10 @@ t_nbr	*stock_numbers(char *argv[])
 	{
 		nb = ft_atoi(argv[i]);
 		if (nb < -2147483648 || nb > 2147483647)
+		{
+			free_stack(&nbrs);
 			return (NULL);
+		}
 		if (!add_nbr(&nbrs, nb))
 			return (NULL);
 		i++;

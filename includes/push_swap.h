@@ -56,4 +56,5 @@ void				push(t_nbr **stack_dst, t_nbr **stack_src);
 void				rotate(t_nbr **stack);
 void				reverse_rotate(t_nbr **stack);
 t_nbr				*new_nbr(long long int nb);
+void				free_stack(t_nbr **stack);
 #endif
