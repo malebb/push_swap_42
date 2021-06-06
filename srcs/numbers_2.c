@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_checker.c                                     :+:      :+:    :+:   */
+/*   numbers_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 10:54:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/06 11:56:36 by mlebrun          ###   ########.fr       */
+/*   Created: 2021/06/06 11:33:52 by mlebrun           #+#    #+#             */
+/*   Updated: 2021/06/06 11:35:09 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "push_swap.h"
 
-void	free_stacks_and_instruction(t_nbr **stack_a, t_nbr **stack_b,
-		char **instruction)
+int	add_nbr_front(t_nbr **nbrs, int nb)
 {
-	free_stack(stack_a);
-	free_stack(stack_b);
-	free(*instruction);
+	t_nbr	*new_nb;
+
+	new_nb = new_nbr(nb);
+	if (!new_nb)
+		return (0);
+	new_nb->next = *nbrs;
+	*nbrs = new_nb;
+	return (1);
+}
+
+void	delete_first_number(t_nbr **nbrs)
+{
+	t_nbr		*next;
+
+	next = (*nbrs)->next;
+	free(*nbrs);
+	*nbrs = next;
 }

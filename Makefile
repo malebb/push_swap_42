@@ -6,7 +6,7 @@
 #    By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/17 19:40:00 by mlebrun           #+#    #+#              #
-#    Updated: 2021/06/06 10:57:54 by mlebrun          ###   ########.fr        #
+#    Updated: 2021/06/06 11:39:32 by mlebrun          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,18 @@ SRCS_FT = srcs/ft/ft_strlen.c \
 	   srcs/ft/ft_strdup.c \
 	   srcs/ft/ft_isdigit.c \
 	   srcs/ft/ft_putstr.c \
-	   srcs/ft/ft_strcmp.c
+	   srcs/ft/ft_strcmp.c \
+	   srcs/algo.c \
+	   srcs/biggest.c \
+	   srcs/free_push_swap.c \
+	   srcs/numbers_2.c \
+	   srcs/pivot.c \
+	   srcs/print.c \
+	   srcs/send_to_other_stack.c \
+	   srcs/sort.c \
+	   srcs/sort_2.c \
+	   srcs/sort_3.c \
+	   srcs/stack.c \
 
 OBJS = ${SRCS:.c=.o}
 
