@@ -6,11 +6,28 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:38 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/06 11:37:09 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/11 16:44:36 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static int	is_sorted(t_nbr *stack)
+{
+	int		previous_value;
+	int		first_nb;
+
+	first_nb = 1;
+	while (stack)
+	{
+		if (!first_nb && (stack->value < previous_value))
+			return (0);
+		first_nb = 0;
+		previous_value = stack->value;
+		stack = stack->next;
+	}
+	return (1);
+}
 
 int	init_sorting(t_ps **data)
 {
@@ -71,6 +88,8 @@ int	main(int argc, char **argv)
 	}
 	data->stack_b = NULL;
 	data->algo = NULL;
+	if (is_sorted(data->stack_a))
+		return (0);
 	if (!create_algo(&data))
 		return (1);
 	print_algo(data->algo);

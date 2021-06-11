@@ -6,7 +6,7 @@
 /*   By: mlebrun <mlebrun@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:37:53 by mlebrun           #+#    #+#             */
-/*   Updated: 2021/06/06 11:02:40 by mlebrun          ###   ########.fr       */
+/*   Updated: 2021/06/11 16:40:55 by mlebrun          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	main(int argc, char *argv[])
 		}
 		free(instruction);
 	}
-	free_stacks_and_instruction(&stack_a, &stack_b, &instruction);
 	ok_or_ko(stack_a, stack_b);
+	free_stacks_and_instruction(&stack_a, &stack_b, &instruction);
 	return (0);
 }
