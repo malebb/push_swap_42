@@ -69,6 +69,15 @@ int	create_algo(t_ps **data)
 	return (1);
 }
 
+int	create_and_print_algo(t_ps **data)
+{
+	if (!create_algo(data))
+		return (1);
+	print_algo((*data)->algo);
+	free_data(data);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_ps		*data;
@@ -89,10 +98,9 @@ int	main(int argc, char **argv)
 	data->stack_b = NULL;
 	data->algo = NULL;
 	if (is_sorted(data->stack_a))
+	{
+		free_data(&data);
 		return (0);
-	if (!create_algo(&data))
-		return (1);
-	print_algo(data->algo);
-	free_data(&data);
-	return (0);
+	}
+	return (create_and_print_algo(&data));
 }
